@@ -1,0 +1,4 @@
+interface:
+  display_name: "飞书周度要闻发布"
+  short_description: "从飞书多源证据生成团队周度要闻并经测试群确认后发布"
+  default_prompt: "Use $lark-weekly-brief-publish to prepare and safely publish this week’s team brief."
