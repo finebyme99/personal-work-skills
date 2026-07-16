@@ -51,7 +51,7 @@ test("filterAndGroupRecords filters statuses and empty owners, and duplicates mu
   assert.equal(result.groups.get("ou_bob").records[0].record_id, "rec_1");
 });
 
-test("buildReminderMarkdown includes bold update fields, row details, defaults and link", () => {
+test("buildReminderMarkdown includes bold fields and a customized-view update link for each record", () => {
   const markdown = buildReminderMarkdown({
     ownerName: "Alice",
     records: [
@@ -63,7 +63,7 @@ test("buildReminderMarkdown includes bold update fields, row details, defaults a
       }),
       record({ 场景名称: "知识助手", 落地进展: "待启动" }, "rec_2"),
     ],
-    baseUrl: "https://example.com/base",
+    baseUrl: "https://example.com/wiki/node?table=tbl_1&view=vew_custom",
     timeZone: "Asia/Shanghai",
   });
 
@@ -75,7 +75,9 @@ test("buildReminderMarkdown includes bold update fields, row details, defaults a
   assert.match(markdown, /- 预计试点上线日期：2026-08-07/);
   assert.match(markdown, /- 进展备注：等待验收/);
   assert.match(markdown, /### 知识助手[\s\S]*未填写/);
-  assert.match(markdown, /\[打开多维表更新\]\(https:\/\/example\.com\/base\)/);
+  assert.match(markdown, /\[打开这条记录更新\]\(https:\/\/example\.com\/wiki\/node\?table=tbl_1&view=vew_custom&record=rec_1\)/);
+  assert.match(markdown, /\[打开这条记录更新\]\(https:\/\/example\.com\/wiki\/node\?table=tbl_1&view=vew_custom&record=rec_2\)/);
+  assert.match(markdown, /\[打开“心愿排名全景”视图\]\(https:\/\/example\.com\/wiki\/node\?table=tbl_1&view=vew_custom\)/);
 });
 
 test("formatDate supports timestamps, date strings and empty values", () => {
