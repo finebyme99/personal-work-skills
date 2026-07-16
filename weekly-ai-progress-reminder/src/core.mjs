@@ -72,6 +72,13 @@ function safeLine(value) {
   return textValue(value).replace(/[\r\n]+/g, " ").trim();
 }
 
+function recordUpdateUrl(baseUrl, recordId) {
+  if (!recordId) return baseUrl;
+  const url = new URL(baseUrl);
+  url.searchParams.set("record", recordId);
+  return url.toString();
+}
+
 export function buildReminderMarkdown({ ownerName: name, records, baseUrl, timeZone = DEFAULT_TIME_ZONE, preview = false }) {
   const lines = [];
   if (preview) lines.push(`> 预览：以下为原计划发送给 ${safeLine(name)} 的消息，仅发送给日志接收人。`, "");
@@ -84,11 +91,12 @@ export function buildReminderMarkdown({ ownerName: name, records, baseUrl, timeZ
       `- 落地进展：${safeLine(fields.落地进展)}`,
       `- 预计试点上线日期：${formatDate(fields.计划试点日期, timeZone)}`,
       `- 进展备注：${safeLine(fields.进展备注)}`,
+      `- [打开这条记录更新](${recordUpdateUrl(baseUrl, record?.record_id)})`,
       "",
     );
   }
 
-  lines.push(`[打开多维表更新](${baseUrl})`);
+  lines.push(`[打开“心愿排名全景”视图](${baseUrl})`);
   return lines.join("\n");
 }
 

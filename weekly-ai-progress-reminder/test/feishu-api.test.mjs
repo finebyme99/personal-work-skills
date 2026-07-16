@@ -70,11 +70,17 @@ test("FeishuApi sends markdown as a post with a bounded deterministic uuid", asy
     markdown: "**hello**",
     idempotencyKey: "2026-07-20:ou_alice:reminder",
   });
+  await api.sendMarkdown({
+    receiveId: "ou_bob",
+    markdown: "**hello again**",
+    idempotencyKey: "2026-07-20:ou_bob:reminder",
+  });
 
   assert.equal(result.messageId, "om_123");
+  assert.equal(calls.filter(({ url }) => url.includes("tenant_access_token")).length, 1);
   const request = calls.at(-1);
   const body = JSON.parse(request.options.body);
-  assert.equal(body.receive_id, "ou_alice");
+  assert.equal(body.receive_id, "ou_bob");
   assert.equal(body.msg_type, "post");
   assert.ok(body.uuid.length <= 50);
   assert.equal(JSON.parse(body.content).zh_cn.content[0][0].tag, "md");
@@ -101,4 +107,23 @@ test("FeishuApi surfaces API errors without including access tokens", async () =
     assert.doesNotMatch(error.message, /tenant-secret|app-secret/);
     return true;
   });
+});
+
+test("FeishuApi rejects non-JSON responses and oversized messages safely", async () => {
+  const api = new FeishuApi({
+    appId: "cli_test",
+    appSecret: "app-secret",
+    baseToken: "base-token",
+    tableId: "table-id",
+    fetch: async (url) => String(url).includes("tenant_access_token")
+      ? jsonResponse({ code: 0, tenant_access_token: "tenant-secret" })
+      : new Response("bad gateway", { status: 502 }),
+  });
+
+  await assert.rejects(api.listAllRecords(), /响应不是 JSON/);
+  await assert.rejects(api.sendMarkdown({
+    receiveId: "ou_alice",
+    markdown: "x".repeat(31 * 1024),
+    idempotencyKey: "oversized",
+  }), /30 KB/);
 });
