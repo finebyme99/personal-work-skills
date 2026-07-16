@@ -8,7 +8,6 @@ import { FeishuApi } from "./feishu-api.mjs";
 const BASE_URL = "https://ztn.feishu.cn/wiki/LRROwulJciI7JYkIT55cQtdpnze?table=tbl9WJyxl9bbtYjb&view=vew4ExW5tl";
 const BASE_TOKEN = "Hc6DbL3Wia2ejMsQn7TcE9g2njc";
 const TABLE_ID = "tbl9WJyxl9bbtYjb";
-const VIEW_ID = "vew4ExW5tl";
 const ALLOWED_STATUSES = new Set(["进行中", "试点上线", "推广上线", "待启动", "开放认领"]);
 
 function required(name) {
@@ -44,7 +43,6 @@ try {
       appSecret: required("FEISHU_APP_SECRET"),
       baseToken: BASE_TOKEN,
       tableId: TABLE_ID,
-      viewId: VIEW_ID,
     });
     report = await runReminder({
       api,
