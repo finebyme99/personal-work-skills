@@ -3,12 +3,12 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { runReminder } from "./core.mjs";
+import { ALLOWED_STATUSES } from "./config.mjs";
 import { FeishuApi } from "./feishu-api.mjs";
 
 const BASE_URL = "https://ztn.feishu.cn/wiki/LRROwulJciI7JYkIT55cQtdpnze?table=tbl9WJyxl9bbtYjb&view=vew4ExW5tl";
 const BASE_TOKEN = "Hc6DbL3Wia2ejMsQn7TcE9g2njc";
 const TABLE_ID = "tbl9WJyxl9bbtYjb";
-const ALLOWED_STATUSES = new Set(["进行中", "试点上线", "推广上线", "待启动", "开放认领"]);
 
 function required(name) {
   const value = process.env[name]?.trim();
