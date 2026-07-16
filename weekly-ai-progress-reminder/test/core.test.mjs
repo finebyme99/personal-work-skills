@@ -80,10 +80,30 @@ test("buildReminderMarkdown includes bold fields and a customized-view update li
   assert.match(markdown, /\[打开“心愿排名全景”视图\]\(https:\/\/example\.com\/wiki\/node\?table=tbl_1&view=vew_custom\)/);
 });
 
+test("buildReminderMarkdown falls back to the customized view when a record id is unavailable", () => {
+  const markdown = buildReminderMarkdown({
+    ownerName: "Alice",
+    records: [{
+      fields: {
+        场景名称: { text: "待补 ID 场景" },
+        落地进展: ["待启动"],
+        进展备注: ["第一项", { text: "第二项" }],
+      },
+    }],
+    baseUrl: "https://example.com/wiki/node?table=tbl_1&view=vew_custom",
+  });
+
+  assert.match(markdown, /### 待补 ID 场景/);
+  assert.match(markdown, /进展备注：第一项、第二项/);
+  assert.match(markdown, /\[打开这条记录更新\]\(https:\/\/example\.com\/wiki\/node\?table=tbl_1&view=vew_custom\)/);
+});
+
 test("formatDate supports timestamps, date strings and empty values", () => {
   assert.equal(formatDate(null, "Asia/Shanghai"), "未填写");
   assert.equal(formatDate("2026-08-11", "Asia/Shanghai"), "2026-08-11");
   assert.equal(formatDate(1786032000000, "Asia/Shanghai"), "2026-08-07");
+  assert.equal(formatDate([{ value: "2026-08-11T00:00:00+08:00" }], "Asia/Shanghai"), "2026-08-11");
+  assert.equal(formatDate("日期待确认", "Asia/Shanghai"), "日期待确认");
 });
 
 test("buildLogMarkdown lists totals and each recipient result without exposing open ids", () => {
