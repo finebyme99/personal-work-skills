@@ -1,0 +1,4 @@
+interface:
+  display_name: "飞书消息推送"
+  short_description: "按预览、确认、审计和安全重试的标准流程发送飞书消息卡片"
+  default_prompt: "使用 $feishu-message-operations 为这次飞书消息推送生成发送方案，先核对主体、受众和卡片，再在确认后执行。"
