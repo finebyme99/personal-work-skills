@@ -16,6 +16,27 @@ func setup() {
     // 确保保存目录存在
     try? FileManager.default.createDirectory(atPath: saveDir, withIntermediateDirectories: true)
     lastChangeCount = NSPasteboard.general.changeCount
+    cleanupOldScreenshots()
+}
+
+// MARK: - 清理过期截图（保留 7 天）
+let retentionDays = 7
+
+func cleanupOldScreenshots() {
+    let fm = FileManager.default
+    let cutoff = Date().addingTimeInterval(-Double(retentionDays) * 86400)
+
+    guard let files = try? fm.contentsOfDirectory(atPath: saveDir) else { return }
+
+    for file in files {
+        guard file.hasPrefix("screenshot_") && file.hasSuffix(".png") else { continue }
+        let path = (saveDir as NSString).appendingPathComponent(file)
+        guard let attrs = try? fm.attributesOfItem(atPath: path),
+              let modified = attrs[.modificationDate] as? Date else { continue }
+        if modified < cutoff {
+            try? fm.removeItem(atPath: path)
+        }
+    }
 }
 
 // MARK: - 剪贴板监听
@@ -53,6 +74,9 @@ func checkClipboard() {
         // 通知（用 osascript 避免 NSUserNotification 在 daemon 中不生效）
         let script = "display notification \"Opt+V 粘贴路径\" with title \"截图已保存\""
         Process.launchedProcess(launchPath: "/usr/bin/osascript", arguments: ["-e", script])
+
+        // 顺便清理过期截图
+        cleanupOldScreenshots()
     } catch {
         fputs("保存失败: \(error)\n", stderr)
     }
