@@ -18,6 +18,8 @@ macOS 剪贴板截图自动落盘 + 快捷键粘贴路径的完整方案。解�
 
 Cmd+V 粘贴图片本身，Opt+V 粘贴文件路径，互不干扰。
 
+重启后行为：LaunchAgent（RunAtLoad + KeepAlive）登录即自启；named pasteboard 和内存中的路径会丢失，因此启动时扫描保存目录，把最新的已有截图设为初始路径，开机后无需先截图即可 Opt+V。
+
 ## 技术要点
 
 ### 为什么不监听文件夹
@@ -35,6 +37,8 @@ named pasteboard 在系统重启后会丢失。内存变量 + named pasteboard +
 ### 权限要求
 
 CGEvent tap 需要辅助功能权限：系统设置 → 隐私与安全性 → 辅助功能 → 添加 `~/bin/screenshot-path-daemon`。
+
+**TCC 坑：辅助功能权限绑定二进制哈希。** 每次重新编译 daemon，文件哈希变化，已授予的权限自动失效，进程会报 "无法创建 event tap" 并被 KeepAlive 反复拉起崩溃。更新代码后必须：先在辅助功能列表删除旧条目，重新添加新二进制并开启，再启动服务。调试期间可先 `launchctl bootout` 停掉服务避免崩溃循环刷日志。
 
 ## 部署步骤
 

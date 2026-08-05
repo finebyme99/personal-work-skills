@@ -17,6 +17,21 @@ func setup() {
     try? FileManager.default.createDirectory(atPath: saveDir, withIntermediateDirectories: true)
     lastChangeCount = NSPasteboard.general.changeCount
     cleanupOldScreenshots()
+    restoreLastPath()
+}
+
+// MARK: - 重启后恢复最后路径
+// 文件名格式 screenshot_<unix时间戳>.png，按文件名倒序取第一个即最新
+func restoreLastPath() {
+    let fm = FileManager.default
+    guard let files = try? fm.contentsOfDirectory(atPath: saveDir) else { return }
+    let newest = files
+        .filter { $0.hasPrefix("screenshot_") && $0.hasSuffix(".png") }
+        .sorted()
+        .last
+    if let newest = newest {
+        lastSavedPath = (saveDir as NSString).appendingPathComponent(newest)
+    }
 }
 
 // MARK: - 清理过期截图（保留 7 天）
