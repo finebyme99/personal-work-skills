@@ -1,0 +1,8 @@
+interface:
+  display_name: "ZT Brand Color HTML"
+  short_description: "Create editable ZT navy-orange HTML slide decks"
+  brand_color: "#F27F22"
+  default_prompt: "Use $zt-brand-color-html to create an editable HTML slide deck in the ZT navy-orange style."
+
+policy:
+  allow_implicit_invocation: true

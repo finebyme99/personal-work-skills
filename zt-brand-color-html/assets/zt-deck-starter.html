@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ZT Brand Color HTML</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800;900&amp;family=Noto+Sans+SC:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --stage-bg: #071737;
+      --slide-bg: #fbfaf5;
+      --paper: #ffffff;
+      --navy: #0c2459;
+      --navy-deep: #081a45;
+      --blue: #2d63ff;
+      --blue-soft: #e8efff;
+      --orange: #f27f22;
+      --orange-soft: #fff0e3;
+      --cyan: #168b98;
+      --cyan-soft: #e3f6f5;
+      --ink: #13224a;
+      --muted: #68748d;
+      --line: #d9deea;
+      --font-display: "Manrope", "Noto Sans SC", sans-serif;
+      --font-body: "Noto Sans SC", sans-serif;
+      --ease: cubic-bezier(.16, 1, .3, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: var(--stage-bg); }
+    body { color: var(--ink); font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+    .deck-viewport { position: fixed; inset: 0; overflow: hidden; background: var(--stage-bg); }
+    .deck-stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: hidden; transform-origin: 0 0; background: var(--slide-bg); }
+    .slide { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; display: block; visibility: hidden; opacity: 0; pointer-events: none; background: radial-gradient(circle at 84% 5%, rgba(45,99,255,.07), transparent 30%), var(--slide-bg); }
+    .slide.active, .slide.visible { visibility: visible; opacity: 1; pointer-events: auto; z-index: 1; }
+    img, video, canvas, svg { max-width: 100%; max-height: 100%; }
+
+    .slide::before { content: ""; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(12,36,89,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(12,36,89,.025) 1px, transparent 1px); background-size: 80px 80px; mask-image: linear-gradient(90deg, transparent, #000 52%); }
+    .rail { position: absolute; inset: 0 auto 0 0; width: 175px; overflow: hidden; background: var(--navy); }
+    .rail::before { content: ""; position: absolute; left: 74px; top: 74px; width: 24px; height: 220px; border-radius: 16px; background: var(--orange); }
+    .rail::after { content: ""; position: absolute; left: -115px; bottom: -85px; width: 330px; height: 330px; border: 1px solid rgba(255,255,255,.13); border-radius: 50%; box-shadow: 0 0 0 60px rgba(255,255,255,.035), 0 0 0 120px rgba(255,255,255,.02); }
+    .rail-mark { position: absolute; left: 67px; bottom: 74px; z-index: 2; color: #fff; font: 800 22px/1 var(--font-display); writing-mode: vertical-rl; letter-spacing: .18em; }
+    .topline { position: absolute; left: 260px; right: 100px; top: 76px; display: flex; justify-content: space-between; color: var(--blue); font: 700 20px/1 var(--font-display); letter-spacing: .12em; }
+    .topline span:last-child { color: #8d96a9; letter-spacing: .06em; }
+    .content { position: absolute; left: 260px; right: 105px; top: 160px; bottom: 140px; }
+    .kicker { display: flex; align-items: center; gap: 16px; margin-bottom: 25px; color: var(--orange); font: 800 23px/1 var(--font-display); letter-spacing: .12em; }
+    .kicker::before { content: ""; width: 44px; height: 5px; border-radius: 5px; background: var(--orange); }
+    h1 { margin: 0; color: var(--ink); font-size: 66px; font-weight: 900; line-height: 1.18; letter-spacing: -.045em; }
+    h1 em { color: var(--blue); font-style: normal; }
+    .lead { margin: 22px 0 0; color: var(--muted); font-size: 26px; line-height: 1.6; max-width: 1320px; }
+    .lead strong { color: var(--ink); font-weight: 700; }
+    .footer { position: absolute; left: 260px; right: 105px; bottom: 72px; display: flex; justify-content: space-between; padding-top: 22px; border-top: 1px solid var(--line); color: #798297; font-size: 20px; }
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
+    .visible .reveal { opacity: 1; transform: none; }
+    .d1 { transition-delay: .08s; } .d2 { transition-delay: .18s; } .d3 { transition-delay: .28s; } .d4 { transition-delay: .38s; }
+
+    /* Replace this sample with the requested story. */
+    .sample-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 28px; margin-top: 42px; }
+    .anchor-card, .card { border: 1px solid rgba(12,36,89,.12); border-radius: 28px; background: rgba(255,255,255,.96); box-shadow: 0 22px 52px rgba(25,45,87,.09); }
+    .anchor-card { position: relative; overflow: hidden; padding: 42px 40px; color: #fff; background: linear-gradient(145deg, var(--navy-deep), var(--navy) 62%, #1e4498); }
+    .anchor-card::after { content: ""; position: absolute; right: -100px; bottom: -130px; width: 320px; height: 320px; border: 42px solid rgba(242,127,34,.27); border-radius: 50%; }
+    .anchor-card h2 { position: relative; z-index: 1; margin: 0 0 18px; font-size: 38px; line-height: 1.3; }
+    .anchor-card p { position: relative; z-index: 1; margin: 0; color: rgba(255,255,255,.8); font-size: 22px; line-height: 1.6; }
+    .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .card { padding: 28px 30px; }
+    .card .no { margin-bottom: 16px; color: var(--orange); font: 800 17px/1 var(--font-display); letter-spacing: .12em; }
+    .card h3 { margin: 0 0 10px; color: var(--ink); font-size: 26px; line-height: 1.3; }
+    .card p { margin: 0; color: var(--muted); font-size: 18px; line-height: 1.55; }
+
+    .deck-controls { position: fixed; left: 50%; bottom: 22px; z-index: 1000; display: flex; align-items: center; gap: 12px; padding: 9px 14px; border-radius: 99px; color: #fff; background: rgba(7,23,55,.82); backdrop-filter: blur(12px); opacity: .28; transition: opacity .2s ease; transform: translateX(-50%); }
+    .deck-controls:hover { opacity: 1; }
+    .deck-controls button { width: 34px; height: 34px; padding: 0; border: 0; border-radius: 50%; color: #fff; background: rgba(255,255,255,.1); cursor: pointer; font-size: 16px; }
+    .deck-controls button:hover { background: var(--orange); }
+    #pageInd { min-width: 64px; text-align: center; font: 700 14px/1 var(--font-display); }
+    .progress-bar { position: fixed; left: 0; top: 0; z-index: 3000; height: 4px; background: var(--orange); transition: width .45s var(--ease); }
+    .edit-hotzone { position: fixed; left: 0; top: 0; z-index: 10000; width: 80px; height: 80px; cursor: pointer; }
+    .edit-toggle { position: fixed; left: 18px; top: 18px; z-index: 10001; width: 44px; height: 44px; border: 0; border-radius: 50%; color: #fff; background: rgba(7,23,55,.9); opacity: 0; pointer-events: none; cursor: pointer; transition: opacity .3s ease; font-size: 18px; }
+    .edit-toggle.show, .edit-toggle.active { opacity: 1; pointer-events: auto; }
+    [contenteditable="true"] { border-radius: 5px; outline: 3px solid rgba(242,127,34,.45); outline-offset: 5px; }
+
+    @media print {
+      html, body { width: 1920px; height: auto; overflow: visible; background: #fff; }
+      .deck-viewport { position: static; overflow: visible; background: #fff; }
+      .deck-stage { position: static; width: auto; height: auto; transform: none !important; background: none; }
+      .slide { position: relative; display: block !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; width: 1920px; height: 1080px; break-after: page; page-break-after: always; }
+      .slide:last-child { break-after: auto; page-break-after: auto; }
+      .deck-controls, .progress-bar, .edit-hotzone, .edit-toggle { display: none !important; }
+      .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck-viewport">
+    <main class="deck-stage" id="deckStage">
+      <section class="slide active visible" data-title="示例页面" aria-label="第1页：示例页面">
+        <aside class="rail"><div class="rail-mark">ZT · BRAND COLOR</div></aside>
+        <header class="topline"><span>替换为演示主题</span><span>SECTION / 01</span></header>
+        <div class="content">
+          <div class="kicker reveal editable" data-id="sample-kicker">核心判断</div>
+          <h1 class="reveal d1 editable" data-id="sample-title">把一句结论，做成<br><em>可被看见的结构</em></h1>
+          <p class="lead reveal d2 editable" data-id="sample-lead">用一条主线、一个证据结构和一个清晰的行动指向，让听众快速理解这页为什么重要。</p>
+          <div class="sample-grid">
+            <article class="anchor-card reveal d2"><h2 class="editable" data-id="sample-anchor-title">主张先于装饰</h2><p class="editable" data-id="sample-anchor-copy">删掉不服务于结论的元素，把视觉重量留给真正需要记住的判断。</p></article>
+            <div class="card-grid">
+              <article class="card reveal d2"><div class="no">01 / CLAIM</div><h3 class="editable" data-id="sample-card-1-title">一句话说清</h3><p class="editable" data-id="sample-card-1-copy">标题承担观点，正文只负责补充证据。</p></article>
+              <article class="card reveal d3"><div class="no">02 / PROOF</div><h3 class="editable" data-id="sample-card-2-title">结构化证明</h3><p class="editable" data-id="sample-card-2-copy">用流程、对比、卡片或图表承接逻辑。</p></article>
+              <article class="card reveal d3"><div class="no">03 / NEXT</div><h3 class="editable" data-id="sample-card-3-title">落到行动</h3><p class="editable" data-id="sample-card-3-copy">让听众知道接下来要做什么或记住什么。</p></article>
+              <article class="card reveal d4"><div class="no">04 / TONE</div><h3 class="editable" data-id="sample-card-4-title">保持克制</h3><p class="editable" data-id="sample-card-4-copy">米白、海军蓝、橙色和少量辅助色足够完成表达。</p></article>
+            </div>
+          </div>
+        </div>
+        <footer class="footer"><span class="editable" data-id="sample-footer-left">ZT Brand Color HTML</span><span>01 / 01</span></footer>
+      </section>
+    </main>
+  </div>
+
+  <div class="progress-bar" id="progressBar" style="width:100%"></div>
+  <nav class="deck-controls" aria-label="演示控制"><button id="prevBtn" type="button" aria-label="上一页">←</button><span id="pageInd">01 / 01</span><button id="nextBtn" type="button" aria-label="下一页">→</button></nav>
+  <div class="edit-hotzone" title="编辑模式（E）"></div>
+  <button class="edit-toggle" id="editToggle" type="button" title="编辑模式（E）">✎</button>
+
+  <script>
+    class Deck {
+      constructor() {
+        this.slides = [...document.querySelectorAll('.slide')];
+        this.stage = document.getElementById('deckStage');
+        this.current = 0;
+        this.touchX = null;
+        this.wheelLock = false;
+        this.scale();
+        addEventListener('resize', () => this.scale());
+        document.getElementById('prevBtn').onclick = () => this.show(this.current - 1);
+        document.getElementById('nextBtn').onclick = () => this.show(this.current + 1);
+        document.addEventListener('keydown', e => {
+          if (e.target?.getAttribute?.('contenteditable') === 'true') return;
+          if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); this.show(this.current + 1); }
+          if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.key)) { e.preventDefault(); this.show(this.current - 1); }
+          if (e.key === 'Home') { e.preventDefault(); this.show(0); }
+          if (e.key === 'End') { e.preventDefault(); this.show(this.slides.length - 1); }
+        });
+        document.addEventListener('wheel', e => {
+          if (this.wheelLock || Math.abs(e.deltaY) < 18) return;
+          this.wheelLock = true;
+          this.show(this.current + (e.deltaY > 0 ? 1 : -1));
+          setTimeout(() => { this.wheelLock = false; }, 650);
+        }, { passive: true });
+        this.stage.addEventListener('touchstart', e => { this.touchX = e.changedTouches[0].screenX; }, { passive: true });
+        this.stage.addEventListener('touchend', e => {
+          if (this.touchX === null) return;
+          const dx = e.changedTouches[0].screenX - this.touchX;
+          if (Math.abs(dx) > 55) this.show(this.current + (dx < 0 ? 1 : -1));
+          this.touchX = null;
+        }, { passive: true });
+        document.querySelectorAll('[data-goto]').forEach(el => el.addEventListener('click', e => { e.preventDefault(); this.show(Number(el.dataset.goto)); }));
+        this.show(0);
+      }
+      scale() {
+        const factor = Math.min(innerWidth / 1920, innerHeight / 1080);
+        const x = (innerWidth - 1920 * factor) / 2;
+        const y = (innerHeight - 1080 * factor) / 2;
+        this.stage.style.transform = `translate(${x}px, ${y}px) scale(${factor})`;
+      }
+      show(index) {
+        this.current = Math.max(0, Math.min(index, this.slides.length - 1));
+        this.slides.forEach((slide, i) => { slide.classList.toggle('active', i === this.current); slide.classList.toggle('visible', i === this.current); });
+        const shown = String(this.current + 1).padStart(2, '0');
+        const total = String(this.slides.length).padStart(2, '0');
+        document.getElementById('pageInd').textContent = `${shown} / ${total}`;
+        document.getElementById('progressBar').style.width = `${((this.current + 1) / this.slides.length) * 100}%`;
+        history.replaceState(null, '', `#slide-${this.current + 1}`);
+      }
+    }
+
+    class InlineEditor {
+      constructor() {
+        this.active = false;
+        this.nodes = [...document.querySelectorAll('.editable[data-id]')];
+        this.storageKey = 'zt-brand-color-html-deck-v1';
+        this.toggle = document.getElementById('editToggle');
+        this.load();
+      }
+      toggleMode() {
+        this.active = !this.active;
+        this.nodes.forEach(node => node.setAttribute('contenteditable', this.active ? 'true' : 'false'));
+        this.toggle.classList.toggle('active', this.active);
+        if (!this.active) this.save();
+      }
+      save() {
+        const data = {};
+        this.nodes.forEach(node => { data[node.dataset.id] = node.innerHTML; });
+        localStorage.setItem(this.storageKey, JSON.stringify(data));
+      }
+      load() {
+        try {
+          const data = JSON.parse(localStorage.getItem(this.storageKey) || '{}');
+          this.nodes.forEach(node => { if (typeof data[node.dataset.id] === 'string') node.innerHTML = data[node.dataset.id]; });
+        } catch (_) {}
+      }
+    }
+
+    const deck = new Deck();
+    const editor = new InlineEditor();
+    const hotzone = document.querySelector('.edit-hotzone');
+    const editToggle = document.getElementById('editToggle');
+    let hideTimer;
+    const revealEdit = () => { clearTimeout(hideTimer); editToggle.classList.add('show'); };
+    const hideEdit = () => { hideTimer = setTimeout(() => { if (!editor.active) editToggle.classList.remove('show'); }, 400); };
+    hotzone.onmouseenter = editToggle.onmouseenter = revealEdit;
+    hotzone.onmouseleave = editToggle.onmouseleave = hideEdit;
+    hotzone.onclick = editToggle.onclick = () => editor.toggleMode();
+    document.addEventListener('keydown', e => {
+      if ((e.key === 'e' || e.key === 'E') && e.target?.getAttribute?.('contenteditable') !== 'true') editor.toggleMode();
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') { e.preventDefault(); editor.save(); }
+    });
+  </script>
+</body>
+</html>
